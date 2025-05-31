@@ -31,7 +31,7 @@ const envSchema = z.object({
     .pipe(z.number().positive())
     .default("8080"),
   DB_URI: z.string().url(),
-  JWT_SECRET: z.string().min(32).optional(),
+  JWT_SECRET: z.string().min(32),
   CORS_ORIGIN: z.string().url().default("http://localhost:5173"),
   RATE_LIMIT_WINDOW_MS: z
     .string()
