@@ -3,6 +3,7 @@ import morgan from "morgan";
 import logger, { logStream } from "./lib/logger";
 import compression from "compression";
 import { config } from "./config";
+import apiRouter from "./routes";
 
 // Server timeouts (in milliseconds)
 const SERVER_TIMEOUTS = {
@@ -32,6 +33,8 @@ app.get("/health", (_, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+app.use("/api", apiRouter);
 
 // 404 handler
 app.use((_req, res) => {
