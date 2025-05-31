@@ -35,7 +35,6 @@ const userSchema = new Schema<UserDocument>(
     email: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
       lowercase: true,
     },
@@ -57,6 +56,8 @@ const userSchema = new Schema<UserDocument>(
     },
   },
 );
+
+userSchema.index({ email: 1 }, { unique: true });
 
 export const User: Model<UserDocument> = mongoose.model<UserDocument>(
   "User",

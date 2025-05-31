@@ -48,7 +48,7 @@ app.use((_req, res) => {
 // Error handler middleware should be last
 app.use(errorHandler);
 
-const startServer = async () => {
+const startServer = async (): Promise<void> => {
   try {
     mongoose.set("strictQuery", true);
     await mongoose.connect(config.dbUri, {
@@ -69,5 +69,33 @@ const startServer = async () => {
     process.exit(EXIT_CODES.ERROR);
   }
 };
+
+const gracefulShutdown = (signal: string): (() => Promise<void>) => {
+  return async () => {
+    logger.info(`${signal} received. Starting graceful shutdown...`);
+
+    try {
+      await mongoose.connection.close();
+      logger.info("MongoDB connection closed");
+    } catch (err) {
+      logger.error("Error closing MongoDB connection", { error: err });
+    }
+
+    process.exit(EXIT_CODES.SUCCESS);
+  };
+};
+
+process.on("uncaughtException", (error) => {
+  logger.error("Uncaught Exception", { error });
+  process.exit(EXIT_CODES.ERROR);
+});
+
+process.on("unhandledRejection", (reason) => {
+  logger.error("Unhandled Rejection", { reason });
+  process.exit(EXIT_CODES.ERROR);
+});
+
+process.on("SIGTERM", gracefulShutdown("SIGTERM"));
+process.on("SIGINT", gracefulShutdown("SIGINT"));
 
 startServer();
