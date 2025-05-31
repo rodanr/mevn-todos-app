@@ -13,6 +13,9 @@ export interface UserDocument extends Document, UserAttrs {
   _id: Types.ObjectId;
 }
 
+// Type for authenticated user without password
+export type AuthUser = Omit<UserDocument, "password">;
+
 const userSchema = new Schema<UserDocument>(
   {
     firstName: {
@@ -45,7 +48,7 @@ const userSchema = new Schema<UserDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform: (_doc, ret) => {
+      transform: (_doc, ret): void => {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
