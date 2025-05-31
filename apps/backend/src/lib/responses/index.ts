@@ -1,13 +1,13 @@
-import { HttpStatus } from "../../constants/http";
+import { HttpStatus } from './status';
 
 type SuccessResponse<T> = {
-  status: "success";
+  status: 'success';
   message: string;
   data: T;
 };
 
 type MessageResponse = {
-  status: "success";
+  status: 'success';
   message: string;
 };
 
@@ -27,7 +27,7 @@ export const respond = {
   withData: <T>(message: string, data: T): [number, SuccessResponse<T>] => [
     HttpStatus.OK,
     {
-      status: "success",
+      status: 'success',
       message,
       data,
     },
@@ -36,7 +36,7 @@ export const respond = {
   withCreated: <T>(message: string, data: T): [number, SuccessResponse<T>] => [
     HttpStatus.CREATED,
     {
-      status: "success",
+      status: 'success',
       message,
       data,
     },
@@ -45,7 +45,7 @@ export const respond = {
   withMessage: (message: string): [number, MessageResponse] => [
     HttpStatus.OK,
     {
-      status: "success",
+      status: 'success',
       message,
     },
   ],
@@ -56,7 +56,7 @@ export const respond = {
   ): [number, MessageResponse] => [
     statusCode,
     {
-      status: "success",
+      status: 'success',
       message,
     },
   ],

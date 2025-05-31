@@ -1,8 +1,7 @@
-import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
-import { AppError, ValidationError } from "../lib/errors";
-import logger from "../lib/logger";
-import { respond } from "../lib/responses";
-import { HttpStatus } from "../constants/http";
+import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import { AppError, ValidationError } from '../lib/errors';
+import logger from '../lib/logger';
+import { HttpStatus, respond } from '../lib/responses';
 
 export const errorHandler: ErrorRequestHandler = (
   err: Error,
@@ -20,7 +19,7 @@ export const errorHandler: ErrorRequestHandler = (
   };
 
   if (err instanceof ValidationError) {
-    logger.warn("Validation error", {
+    logger.warn('Validation error', {
       ...errorContext,
       validationErrors: err.errors.errors,
     });
@@ -33,7 +32,7 @@ export const errorHandler: ErrorRequestHandler = (
   }
 
   if (err instanceof AppError) {
-    logger.error("Application error", {
+    logger.error('Application error', {
       ...errorContext,
       statusCode: err.statusCode,
     });
@@ -43,11 +42,11 @@ export const errorHandler: ErrorRequestHandler = (
     return;
   }
 
-  logger.error("Unexpected error", errorContext);
+  logger.error('Unexpected error', errorContext);
 
   const [status, response] = respond.withError(
     HttpStatus.INTERNAL_SERVER_ERROR,
-    "Internal server error",
+    'Internal server error',
   );
   res.status(status).json(response);
 };

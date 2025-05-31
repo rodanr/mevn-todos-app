@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 import {
   createTodoSchema,
   todoFilterSchema,
   updateTodoSchema,
-} from "../dto/todo.dto";
-import { respond } from "../lib/responses";
-import * as todoService from "../services/todo.service";
+} from '../dto/todo.dto';
+import { respond } from '../lib/responses';
+import * as todoService from '../services/todo.service';
 
 export const createTodo = async (
   req: Request,
@@ -26,7 +26,7 @@ export const createTodo = async (
       todoData.data,
     );
     const [status, response] = respond.withData(
-      "Todo created successfully",
+      'Todo created successfully',
       todo,
     );
     return res.status(status).json(response);
@@ -55,7 +55,7 @@ export const updateTodo = async (
       todoData.data,
     );
     const [status, response] = respond.withData(
-      "Todo updated successfully",
+      'Todo updated successfully',
       todo,
     );
     return res.status(status).json(response);
@@ -71,7 +71,7 @@ export const deleteTodo = async (
 ): Promise<Response | undefined> => {
   try {
     await todoService.deleteTodo(req.user!._id.toString(), req.params.todoId);
-    const [status, response] = respond.withMessage("Todo deleted successfully");
+    const [status, response] = respond.withMessage('Todo deleted successfully');
     return res.status(status).json(response);
   } catch (error) {
     next(error);
@@ -89,7 +89,7 @@ export const getTodoById = async (
       req.params.todoId,
     );
     const [status, response] = respond.withData(
-      "Todo retrieved successfully",
+      'Todo retrieved successfully',
       todo,
     );
     return res.status(status).json(response);
@@ -117,7 +117,7 @@ export const listTodos = async (
       filterData.data,
     );
     const [status, response] = respond.withData(
-      "Todos retrieved successfully",
+      'Todos retrieved successfully',
       todos,
     );
     return res.status(status).json(response);

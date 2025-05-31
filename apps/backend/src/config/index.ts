@@ -1,5 +1,5 @@
-import { z } from "zod";
-import dotenv from "dotenv";
+import { z } from 'zod';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -12,13 +12,13 @@ const TIME_MS = {
 
 const SIZE = {
   DEFAULT_POOL_SIZE: 10,
-  DEFAULT_BODY_LIMIT: "10mb",
+  DEFAULT_BODY_LIMIT: '10mb',
 } as const;
 
 export const NodeEnv = {
-  Development: "development",
-  Production: "production",
-  Test: "test",
+  Development: 'development',
+  Production: 'production',
+  Test: 'test',
 } as const;
 
 const envSchema = z.object({
@@ -29,16 +29,16 @@ const envSchema = z.object({
     .string()
     .transform(Number)
     .pipe(z.number().positive())
-    .default("8080"),
+    .default('8080'),
   DB_URI: z.string().url(),
   JWT_SECRET: z.string().min(32),
-  CORS_ORIGIN: z.string().url().default("http://localhost:5173"),
+  CORS_ORIGIN: z.string().url().default('http://localhost:5173'),
   RATE_LIMIT_WINDOW_MS: z
     .string()
     .transform(Number)
     .default(String(TIME_MS.FIFTEEN_MINUTES)),
-  RATE_LIMIT_MAX: z.string().transform(Number).default("100"),
-  SERVICE_NAME: z.string().default("backend-service"),
+  RATE_LIMIT_MAX: z.string().transform(Number).default('100'),
+  SERVICE_NAME: z.string().default('backend-service'),
   BODY_LIMIT: z.string().default(SIZE.DEFAULT_BODY_LIMIT),
   MONGODB_POOL_SIZE: z
     .string()

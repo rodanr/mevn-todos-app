@@ -1,4 +1,4 @@
-import { ZodError } from "zod";
+import { ZodError } from 'zod';
 
 export class AppError extends Error {
   constructor(
@@ -6,21 +6,21 @@ export class AppError extends Error {
     public readonly message: string,
   ) {
     super(message);
-    this.name = "AppError";
+    this.name = 'AppError';
     Error.captureStackTrace(this, this.constructor);
   }
 }
 
 export class ValidationError extends AppError {
   constructor(public readonly errors: ZodError) {
-    super(400, "Validation Error");
-    this.name = "ValidationError";
+    super(400, 'Validation Error');
+    this.name = 'ValidationError';
   }
 
   getFieldErrors(): Record<string, string[]> {
     const fieldErrors: Record<string, string[]> = {};
     this.errors.errors.forEach((error) => {
-      const field = error.path.join(".");
+      const field = error.path.join('.');
       if (!fieldErrors[field]) {
         fieldErrors[field] = [];
       }

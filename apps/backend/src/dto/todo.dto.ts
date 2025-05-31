@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const todoBaseSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100, "Name is too long"),
+  name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
   description: z
     .string()
-    .min(1, "Description is required")
-    .max(500, "Description is too long"),
-  dueDate: z.string().datetime("Invalid date format"),
+    .min(1, 'Description is required')
+    .max(500, 'Description is too long'),
+  dueDate: z.string().datetime('Invalid date format'),
 });
 
 export const createTodoSchema = todoBaseSchema;
@@ -17,15 +17,15 @@ export const updateTodoSchema = todoBaseSchema.partial().extend({
 
 export const todoFilterSchema = z.object({
   isDone: z
-    .enum(["true", "false"])
+    .enum(['true', 'false'])
     .nullish()
     .transform((val) =>
-      val === null || val === undefined ? undefined : val === "true",
+      val === null || val === undefined ? undefined : val === 'true',
     ),
   upcoming: z
-    .enum(["true", "false"])
+    .enum(['true', 'false'])
     .optional()
-    .transform((val) => val === "true"),
+    .transform((val) => val === 'true'),
 });
 
 export type CreateTodoInput = z.infer<typeof createTodoSchema>;

@@ -1,4 +1,4 @@
-import mongoose, { Document, Model, Schema, Types } from "mongoose";
+import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 
 export interface UserAttrs {
   firstName: string;
@@ -14,7 +14,7 @@ export interface UserDocument extends Document, UserAttrs {
 }
 
 // Type for authenticated user without password
-export type AuthUser = Omit<UserDocument, "password">;
+export type AuthUser = Omit<UserDocument, 'password'>;
 
 const userSchema = new Schema<UserDocument>(
   {
@@ -60,6 +60,6 @@ const userSchema = new Schema<UserDocument>(
 userSchema.index({ email: 1 }, { unique: true });
 
 export const User: Model<UserDocument> = mongoose.model<UserDocument>(
-  "User",
+  'User',
   userSchema,
 );

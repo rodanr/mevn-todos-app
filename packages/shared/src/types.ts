@@ -5,4 +5,4 @@ export interface Todo {
   createdAt: Date;
 }
 
-export type CreateTodoInput = Omit<Todo, "id" | "createdAt">;
+export type CreateTodoInput = Omit<Todo, 'id' | 'createdAt'>;

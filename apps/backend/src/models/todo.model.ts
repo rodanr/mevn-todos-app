@@ -1,4 +1,4 @@
-import mongoose, { Document, Model, Schema, Types } from "mongoose";
+import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 
 export interface TodoAttrs {
   name: string;
@@ -45,7 +45,7 @@ const todoSchema = new Schema<TodoDocument>(
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
   },
@@ -65,6 +65,6 @@ todoSchema.index({ userId: 1, isDone: 1 });
 todoSchema.index({ userId: 1, dueDate: 1 });
 
 export const Todo: Model<TodoDocument> = mongoose.model<TodoDocument>(
-  "Todo",
+  'Todo',
   todoSchema,
 );

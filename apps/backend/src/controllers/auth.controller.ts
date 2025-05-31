@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import * as authService from "../services/auth.service";
-import { loginSchema, registerUserSchema } from "../dto/auth.dto";
-import { respond } from "../lib/responses";
+import { Request, Response, NextFunction } from 'express';
+import * as authService from '../services/auth.service';
+import { loginSchema, registerUserSchema } from '../dto/auth.dto';
+import { respond } from '../lib/responses';
 
 export const registerUser = async (
   req: Request,
@@ -18,7 +18,7 @@ export const registerUser = async (
     }
 
     await authService.registerUser(userData.data);
-    const [status, response] = respond.withMessage("User created successfully");
+    const [status, response] = respond.withMessage('User created successfully');
     res.status(status).json(response);
   } catch (error) {
     next(error);
@@ -40,7 +40,7 @@ export const login = async (
     }
 
     const { user, token } = await authService.login(loginData.data);
-    const [status, response] = respond.withData("Login successful", {
+    const [status, response] = respond.withData('Login successful', {
       user: {
         id: user._id,
         email: user.email,

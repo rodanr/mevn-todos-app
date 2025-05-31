@@ -1,18 +1,18 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 import {
   CreateTodoInput,
   TodoFilterInput,
   UpdateTodoInput,
-} from "../dto/todo.dto";
-import { AppError } from "../lib/errors";
-import logger from "../lib/logger";
-import { Todo, TodoDocument } from "../models";
+} from '../dto/todo.dto';
+import { AppError } from '../lib/errors';
+import logger from '../lib/logger';
+import { Todo, TodoDocument } from '../models';
 
 export const createTodo = async (
   userId: string,
   data: CreateTodoInput,
 ): Promise<TodoDocument> => {
-  logger.info("Creating todo for user:", userId);
+  logger.info('Creating todo for user:', userId);
   const todo = new Todo({
     ...data,
     userId: new Types.ObjectId(userId),
@@ -26,14 +26,14 @@ export const updateTodo = async (
   todoId: string,
   data: UpdateTodoInput,
 ): Promise<TodoDocument> => {
-  logger.info("Updating todo:", todoId, "for user:", userId);
+  logger.info('Updating todo:', todoId, 'for user:', userId);
   const todo = await Todo.findOne({
     _id: todoId,
     userId: new Types.ObjectId(userId),
   });
 
   if (!todo) {
-    throw new AppError(404, "Todo not found");
+    throw new AppError(404, 'Todo not found');
   }
 
   // Handle completedAt when isDone is updated
@@ -56,14 +56,14 @@ export const deleteTodo = async (
   userId: string,
   todoId: string,
 ): Promise<void> => {
-  logger.info("Deleting todo:", todoId, "for user:", userId);
+  logger.info('Deleting todo:', todoId, 'for user:', userId);
   const result = await Todo.deleteOne({
     _id: todoId,
     userId: new Types.ObjectId(userId),
   });
 
   if (result.deletedCount === 0) {
-    throw new AppError(404, "Todo not found");
+    throw new AppError(404, 'Todo not found');
   }
 };
 
@@ -77,7 +77,7 @@ export const getTodoById = async (
   });
 
   if (!todo) {
-    throw new AppError(404, "Todo not found");
+    throw new AppError(404, 'Todo not found');
   }
 
   return todo;
@@ -87,7 +87,7 @@ export const listTodos = async (
   userId: string,
   filters: TodoFilterInput,
 ): Promise<TodoDocument[]> => {
-  logger.info("Listing todos for user:", userId, "with filters:", filters);
+  logger.info('Listing todos for user:', userId, 'with filters:', filters);
 
   const query: {
     userId: Types.ObjectId;
