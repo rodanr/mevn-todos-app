@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
 import logger, { logStream } from "./lib/logger";
 import compression from "compression";
 import { config } from "./config";
@@ -21,6 +22,14 @@ const EXIT_CODES = {
 } as const;
 
 const app = express();
+
+app.use(
+  cors({
+    origin: config.cors.origin,
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 app.use(morgan("combined", { stream: logStream }));
 app.use(express.urlencoded({ extended: true, limit: config.http.bodyLimit }));
