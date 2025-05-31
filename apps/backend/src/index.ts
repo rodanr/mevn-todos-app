@@ -4,6 +4,9 @@ import logger, { logStream } from "./lib/logger";
 import compression from "compression";
 import { config } from "./config";
 import apiRouter from "./routes";
+import mongoose from "mongoose";
+import { errorHandler } from "./middlewares/error.middleware";
+import { respond } from "./lib/responses";
 
 // Server timeouts (in milliseconds)
 const SERVER_TIMEOUTS = {
@@ -24,28 +27,36 @@ app.use(express.urlencoded({ extended: true, limit: config.http.bodyLimit }));
 app.use(compression());
 
 app.get("/health", (_, res) => {
-  res.send({
-    status: "ok",
+  const [status, response] = respond.withData("Service is healthy", {
     service: config.serviceName,
     version: process.env.npm_package_version || "1.0.0",
     environment: config.env,
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
   });
+  res.status(status).json(response);
 });
 
 app.use("/api", apiRouter);
 
 // 404 handler
 app.use((_req, res) => {
-  res.status(404).json({
-    status: "error",
-    message: "Resource not found",
-  });
+  const [status, response] = respond.withError(404, "Resource not found");
+  res.status(status).json(response);
 });
+
+// Error handler middleware should be last
+app.use(errorHandler);
 
 const startServer = async () => {
   try {
+    mongoose.set("strictQuery", true);
+    await mongoose.connect(config.dbUri, {
+      maxPoolSize: config.mongodb.poolSize,
+      maxIdleTimeMS: config.mongodb.maxIdleTimeMS,
+    });
+    logger.info("Connected to MongoDB");
+
     const server = app.listen(config.port, () => {
       logger.info(`Server is running on http://localhost:${config.port}`);
     });
@@ -54,6 +65,7 @@ const startServer = async () => {
     server.keepAliveTimeout = SERVER_TIMEOUTS.KEEP_ALIVE;
     server.headersTimeout = SERVER_TIMEOUTS.HEADERS;
   } catch (error) {
+    logger.error("Failed to initialize the server:", error);
     process.exit(EXIT_CODES.ERROR);
   }
 };

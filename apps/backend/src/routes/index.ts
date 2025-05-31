@@ -1,9 +1,9 @@
 import { Router } from "express";
-import userRoutes from "./user.routes";
+import authRoutes from "./auth.routes";
 
 const apiV1Router: Router = Router();
 
-apiV1Router.use(userRoutes);
+apiV1Router.use(authRoutes);
 
 const apiRouter: Router = Router();
 apiRouter.use("/v1", apiV1Router);
