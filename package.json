@@ -10,6 +10,7 @@
     "dev": "pnpm --parallel -r dev",
     "dev:shared": "pnpm --filter @mevn-todos/shared dev",
     "dev:backend": "pnpm --filter @mevn-todos/backend dev",
+    "dev:frontend": "pnpm --filter @mevn-todos/frontend dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
