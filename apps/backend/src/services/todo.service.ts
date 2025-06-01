@@ -114,12 +114,16 @@ export const listTodos = async (
   const query: {
     userId: Types.ObjectId;
     isDone?: boolean;
-    dueDate?: { $gte: Date };
+    dueDate?: { $gte: Date } | { $lt: Date };
   } = {
     userId: new Types.ObjectId(userId),
   };
 
-  if (filters.upcoming) {
+  if (filters.overdue) {
+    // Overdue: not completed and due date has passed
+    query.dueDate = { $lt: new Date() };
+    query.isDone = false;
+  } else if (filters.upcoming) {
     query.dueDate = { $gte: new Date() };
     // Ensure upcoming todos are not done
     query.isDone = false;

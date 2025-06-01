@@ -15,4 +15,5 @@ export type TodoResponseDto = Todo;
 export interface TodoFilter {
   isDone?: boolean;
   upcoming?: boolean;
+  overdue?: boolean;
 }

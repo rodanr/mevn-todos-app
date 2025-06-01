@@ -13,6 +13,7 @@ export const useTodosStore = defineStore('todos', () => {
   const filterDisplay = computed((): string => {
     if (currentFilter.value.isDone === true) return 'Completed'
     if (currentFilter.value.upcoming) return 'Upcoming'
+    if (currentFilter.value.overdue) return 'Overdue'
     return 'All Todos'
   })
 

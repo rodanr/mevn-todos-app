@@ -26,6 +26,10 @@ export const todoFilterSchema = z.object({
     .enum(['true', 'false'])
     .optional()
     .transform((val) => val === 'true'),
+  overdue: z
+    .enum(['true', 'false'])
+    .optional()
+    .transform((val) => val === 'true'),
   page: z
     .string()
     .optional()

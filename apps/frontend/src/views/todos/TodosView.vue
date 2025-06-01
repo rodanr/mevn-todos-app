@@ -27,12 +27,16 @@
           <div class="filter-buttons">
             <Button
               :severity="
-                !todosStore.currentFilter.isDone && !todosStore.currentFilter.upcoming
-                  ? 'primary'
-                  : 'secondary'
+                todosStore.currentFilter.isDone !== undefined ||
+                todosStore.currentFilter.upcoming ||
+                todosStore.currentFilter.overdue
+                  ? 'secondary'
+                  : 'primary'
               "
               :outlined="
-                todosStore.currentFilter.isDone !== undefined || todosStore.currentFilter.upcoming
+                todosStore.currentFilter.isDone !== undefined ||
+                todosStore.currentFilter.upcoming ||
+                todosStore.currentFilter.overdue
               "
               label="All"
               size="small"
@@ -54,6 +58,14 @@
               size="small"
               class="filter-btn"
               @click="todosStore.setFilter({ upcoming: true })"
+            />
+            <Button
+              :severity="todosStore.currentFilter.overdue ? 'primary' : 'secondary'"
+              :outlined="!todosStore.currentFilter.overdue"
+              label="Overdue"
+              size="small"
+              class="filter-btn"
+              @click="todosStore.setFilter({ overdue: true })"
             />
           </div>
           <div class="filter-info">

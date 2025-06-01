@@ -13,12 +13,16 @@ export const todosApi = {
   ): Promise<PaginatedTodosResponse<Todo>> {
     const params = new URLSearchParams()
 
-    if (filter?.isDone !== undefined) {
+    if (filter?.isDone) {
       params.append('isDone', filter.isDone.toString())
     }
 
     if (filter?.upcoming) {
       params.append('upcoming', 'true')
+    }
+
+    if (filter?.overdue) {
+      params.append('overdue', 'true')
     }
 
     if (filter?.page) {
