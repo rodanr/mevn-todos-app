@@ -8,6 +8,7 @@ import apiRouter from './routes';
 import mongoose from 'mongoose';
 import { errorHandler } from './middlewares/error.middleware';
 import { respond } from './lib/responses';
+import { rateLimiter } from './middlewares/security.middleware';
 
 // Server timeouts (in milliseconds)
 const SERVER_TIMEOUTS = {
@@ -34,6 +35,7 @@ app.use(express.json());
 app.use(morgan('combined', { stream: logStream }));
 app.use(express.urlencoded({ extended: true, limit: config.http.bodyLimit }));
 app.use(compression());
+app.use(rateLimiter);
 
 app.get('/health', (_, res) => {
   const [status, response] = respond.withData('Service is healthy', {
