@@ -1,23 +1,16 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import * as authService from '../services/auth.service';
-import { loginSchema, registerUserSchema } from '../dto/auth.dto';
+import { RegisterUserInput, LoginInput } from '../dto/auth.dto';
 import { respond } from '../lib/responses';
+import { ValidatedRequest } from '../middlewares/validation.middleware';
 
 export const registerUser = async (
-  req: Request,
+  req: ValidatedRequest<RegisterUserInput>,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
-    const userData = registerUserSchema.safeParse(req.body);
-    if (!userData.success) {
-      const [status, response] = respond.withValidationError(
-        userData.error.flatten().fieldErrors,
-      );
-      return res.status(status).json(response);
-    }
-
-    await authService.registerUser(userData.data);
+    await authService.registerUser(req.validatedBody!);
     const [status, response] = respond.withMessage('User created successfully');
     res.status(status).json(response);
   } catch (error) {
@@ -26,20 +19,12 @@ export const registerUser = async (
 };
 
 export const login = async (
-  req: Request,
+  req: ValidatedRequest<LoginInput>,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
-    const loginData = loginSchema.safeParse(req.body);
-    if (!loginData.success) {
-      const [status, response] = respond.withValidationError(
-        loginData.error.flatten().fieldErrors,
-      );
-      return res.status(status).json(response);
-    }
-
-    const { user, token } = await authService.login(loginData.data);
+    const { user, token } = await authService.login(req.validatedBody!);
     const [status, response] = respond.withData('Login successful', {
       user: {
         id: user._id,

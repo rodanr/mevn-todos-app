@@ -1,29 +1,22 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import {
-  createTodoSchema,
-  todoFilterSchema,
-  updateTodoSchema,
+  CreateTodoInput,
+  UpdateTodoInput,
+  TodoFilterInput,
 } from '../dto/todo.dto';
 import { respond } from '../lib/responses';
 import * as todoService from '../services/todo.service';
+import { ValidatedRequest } from '../middlewares/validation.middleware';
 
 export const createTodo = async (
-  req: Request,
+  req: ValidatedRequest<CreateTodoInput>,
   res: Response,
   next: NextFunction,
 ): Promise<Response | undefined> => {
   try {
-    const todoData = createTodoSchema.safeParse(req.body);
-    if (!todoData.success) {
-      const [status, response] = respond.withValidationError(
-        todoData.error.flatten().fieldErrors,
-      );
-      return res.status(status).json(response);
-    }
-
     const todo = await todoService.createTodo(
       req.user!._id.toString(),
-      todoData.data,
+      req.validatedBody!,
     );
     const [status, response] = respond.withData(
       'Todo created successfully',
@@ -36,23 +29,15 @@ export const createTodo = async (
 };
 
 export const updateTodo = async (
-  req: Request,
+  req: ValidatedRequest<UpdateTodoInput>,
   res: Response,
   next: NextFunction,
 ): Promise<Response | undefined> => {
   try {
-    const todoData = updateTodoSchema.safeParse(req.body);
-    if (!todoData.success) {
-      const [status, response] = respond.withValidationError(
-        todoData.error.flatten().fieldErrors,
-      );
-      return res.status(status).json(response);
-    }
-
     const todo = await todoService.updateTodo(
       req.user!._id.toString(),
       req.params.todoId,
-      todoData.data,
+      req.validatedBody!,
     );
     const [status, response] = respond.withData(
       'Todo updated successfully',
@@ -65,7 +50,7 @@ export const updateTodo = async (
 };
 
 export const deleteTodo = async (
-  req: Request,
+  req: ValidatedRequest,
   res: Response,
   next: NextFunction,
 ): Promise<Response | undefined> => {
@@ -79,7 +64,7 @@ export const deleteTodo = async (
 };
 
 export const getTodoById = async (
-  req: Request,
+  req: ValidatedRequest,
   res: Response,
   next: NextFunction,
 ): Promise<Response | undefined> => {
@@ -99,22 +84,14 @@ export const getTodoById = async (
 };
 
 export const listTodos = async (
-  req: Request,
+  req: ValidatedRequest<unknown, unknown, TodoFilterInput>,
   res: Response,
   next: NextFunction,
 ): Promise<Response | undefined> => {
   try {
-    const filterData = todoFilterSchema.safeParse(req.query);
-    if (!filterData.success) {
-      const [status, response] = respond.withValidationError(
-        filterData.error.flatten().fieldErrors,
-      );
-      return res.status(status).json(response);
-    }
-
     const todos = await todoService.listTodos(
       req.user!._id.toString(),
-      filterData.data,
+      req.validatedQuery!,
     );
     const [status, response] = respond.withData(
       'Todos retrieved successfully',
