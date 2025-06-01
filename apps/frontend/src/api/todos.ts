@@ -1,22 +1,16 @@
 import { apiClient } from './client'
-import type { Todo, CreateTodoInput, UpdateTodoInput, TodoFilter } from '@/types'
-
-export interface PaginatedResponse<T> {
-  todos: T[]
-  pagination: {
-    currentPage: number
-    totalPages: number
-    totalItems: number
-    itemsPerPage: number
-    hasNextPage: boolean
-    hasPreviousPage: boolean
-  }
-}
+import type {
+  Todo,
+  CreateTodoInput,
+  UpdateTodoInput,
+  TodoFilter,
+  PaginatedTodosResponse,
+} from '@mevn-todos/shared'
 
 export const todosApi = {
   async getTodos(
     filter?: TodoFilter & { page?: number; limit?: number },
-  ): Promise<PaginatedResponse<Todo>> {
+  ): Promise<PaginatedTodosResponse<Todo>> {
     const params = new URLSearchParams()
 
     if (filter?.isDone !== undefined) {
@@ -38,7 +32,7 @@ export const todosApi = {
     const queryString = params.toString()
     const url = `/api/v1/todos${queryString ? `?${queryString}` : ''}`
 
-    return await apiClient.get<PaginatedResponse<Todo>>(url)
+    return await apiClient.get<PaginatedTodosResponse<Todo>>(url)
   },
 
   async getTodoById(id: string): Promise<Todo> {

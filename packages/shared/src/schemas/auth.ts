@@ -24,5 +24,6 @@ export const loginSchema = z.object({
     .max(100, 'Password is too long'),
 });
 
+// Inferred types from schemas
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;

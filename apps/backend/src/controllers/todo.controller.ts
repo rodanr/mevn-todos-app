@@ -3,7 +3,7 @@ import {
   CreateTodoInput,
   UpdateTodoInput,
   TodoFilterInput,
-} from '../dto/todo.dto';
+} from '@mevn-todos/shared';
 import { respond } from '../lib/responses';
 import * as todoService from '../services/todo.service';
 import { ValidatedRequest } from '../middlewares/validation.middleware';

@@ -1,4 +1,4 @@
-import { LoginInput, RegisterUserInput } from '../dto/auth.dto';
+import { LoginInput, RegisterUserInput } from '@mevn-todos/shared';
 import { AppError } from '../lib/errors';
 import logger from '../lib/logger';
 import { User, UserDocument } from '../models';

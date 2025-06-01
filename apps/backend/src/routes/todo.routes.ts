@@ -8,7 +8,7 @@ import {
   createTodoSchema,
   updateTodoSchema,
   todoFilterSchema,
-} from '../dto/todo.dto';
+} from '@mevn-todos/shared';
 import {
   createTodo,
   deleteTodo,

@@ -1,21 +1,19 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { authApi } from '@/api/auth'
-import type { User, LoginCredentials, RegisterCredentials, AuthResponse } from '@/types'
+import type { User, LoginInput, LoginOutput, RegisterUserInput } from '@mevn-todos/shared'
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User | null>(null)
+  const user = ref<Omit<User, 'createdAt' | 'updatedAt'> | null>(null)
   const token = ref<string | null>(null)
   const isLoading = ref(false)
 
-  // Computed
   const isAuthenticated = computed((): boolean => !!token.value && !!user.value)
   const fullName = computed((): string =>
     user.value ? `${user.value.firstName} ${user.value.lastName}` : '',
   )
 
-  // Actions
-  const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
+  const login = async (credentials: LoginInput): Promise<LoginOutput> => {
     isLoading.value = true
     try {
       const response = await authApi.login(credentials)
@@ -32,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const register = async (credentials: RegisterCredentials): Promise<void> => {
+  const register = async (credentials: RegisterUserInput): Promise<void> => {
     isLoading.value = true
     try {
       await authApi.register(credentials)
@@ -47,8 +45,6 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('auth-token')
     localStorage.removeItem('user')
 
-    // Clear any cached data when logging out
-    // This prevents stale data from appearing for the next user
     setTimeout(() => {
       window.location.reload()
     }, 100)

@@ -4,7 +4,7 @@ import { useToast } from 'primevue/usetoast'
 import { todosApi } from '@/api/todos'
 import { useTodosStore } from '@/stores/todos'
 import { useAuthStore } from '@/stores/auth'
-import type { Todo, UpdateTodoInput, CreateTodoInput } from '@/types'
+import type { Todo, UpdateTodoInput, CreateTodoInput } from '@mevn-todos/shared'
 import type { ComputedRef } from 'vue'
 
 interface UseTodosReturn {

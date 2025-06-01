@@ -1,6 +1,6 @@
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios'
 import { config } from '@/config'
-import type { ApiResponse } from '@/types'
+import type { ApiResponse } from '@mevn-todos/shared'
 
 class ApiClient {
   private client: AxiosInstance

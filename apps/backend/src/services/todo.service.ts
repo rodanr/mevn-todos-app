@@ -5,12 +5,30 @@ import {
   UpdateTodoInput,
   PaginatedTodosResponse,
   TodoResponseDto,
-  toTodoResponseDto,
-  toTodoResponseDtoList,
-} from '../dto/todo.dto';
+} from '@mevn-todos/shared';
 import { AppError } from '../lib/errors';
 import logger from '../lib/logger';
-import { Todo } from '../models';
+import { Todo, TodoDocument } from '../models';
+
+const toTodoResponseDto = (document: TodoDocument): TodoResponseDto => {
+  return {
+    id: document.id || document._id!.toString(),
+    name: document.name,
+    description: document.description,
+    dueDate: document.dueDate.toISOString(),
+    isDone: document.isDone,
+    completedAt: document.completedAt?.toISOString() || null,
+    userId: document.userId.toString(),
+    createdAt: document.createdAt.toISOString(),
+    updatedAt: document.updatedAt.toISOString(),
+  };
+};
+
+const toTodoResponseDtoList = (
+  documents: TodoDocument[],
+): TodoResponseDto[] => {
+  return documents.map(toTodoResponseDto);
+};
 
 export const createTodo = async (
   userId: string,
@@ -90,7 +108,7 @@ export const getTodoById = async (
 export const listTodos = async (
   userId: string,
   filters: TodoFilterInput,
-): Promise<PaginatedTodosResponse> => {
+): Promise<PaginatedTodosResponse<TodoResponseDto>> => {
   logger.info('Listing todos for user:', userId, 'with filters:', filters);
 
   const query: {
