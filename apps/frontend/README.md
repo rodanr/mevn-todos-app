@@ -1,45 +1,99 @@
-# .
+# Vue Todo App Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+A modern Vue.js frontend for the MEVN Todo application with TypeScript, PrimeVue, and comprehensive state management.
 
-## Recommended IDE Setup
+## 🚀 Quick Start
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+1. **Install dependencies:**
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```bash
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+2. **Set up environment variables:**
 
-```sh
+```bash
+cp .env.example .env
+```
+
+3. **Start development server:**
+
+```bash
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+## 🔧 Environment Configuration
 
-```sh
-pnpm build
+### Required Environment Variables
+
+Copy `.env.example` to `.env` and configure the following variables:
+
+```bash
+# API Configuration (Required)
+VITE_API_BASE_URL=http://localhost:3000/api/v1
+
+# App Configuration
+VITE_APP_NAME=Todo App
+VITE_APP_VERSION=1.0.0
+
+# Environment
+VITE_NODE_ENV=development
+
+# Optional Features
+VITE_ENABLE_DEVTOOLS=true
+VITE_ENABLE_MOCK_API=false
+
+# API Settings
+VITE_API_TIMEOUT=10000
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Environment Files
 
-```sh
-pnpm test:unit
+- `.env.example` - Template with all available variables
+- `.env.production.example` - Production environment template
+- `.env` - Local development environment (not committed to git)
+- `.env.local` - Local overrides (not committed to git)
+
+### Backend Integration
+
+Ensure your backend API is running on the URL specified in `VITE_API_BASE_URL`. The frontend expects:
+
+- Authentication endpoints: `/auth/login`, `/auth/register`
+- Todo endpoints: `/todos` with full CRUD operations
+- JWT token-based authentication
+
+## 🏗️ Project Structure
+
+```
+src/
+├── api/          # API service layers
+├── stores/       # Pinia state management
+├── composables/  # TanStack Query hooks
+├── config/       # Environment configuration
+├── types/        # TypeScript definitions
+├── utils/        # Utility functions
+├── views/        # Page components
+├── components/   # Reusable components
+└── router/       # Vue Router configuration
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## 🛠️ Tech Stack
 
-```sh
-pnpm lint
+- **Vue 3** with Composition API
+- **TypeScript** for type safety
+- **Pinia** for state management
+- **TanStack Query** for data fetching
+- **PrimeVue** for UI components
+- **VeeValidate + Zod** for form validation
+- **Axios** for HTTP requests
+- **Vue Router** for routing
+
+## 📝 Available Scripts
+
+```bash
+pnpm dev          # Start development server
+pnpm build        # Build for production
+pnpm preview      # Preview production build
+pnpm lint         # Run ESLint
+pnpm type-check   # Run TypeScript checks
 ```

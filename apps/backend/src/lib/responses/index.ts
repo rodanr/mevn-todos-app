@@ -18,11 +18,6 @@ type ValidationErrorResponse = {
   };
 };
 
-export type ApiResponse<T = unknown> =
-  | SuccessResponse<T>
-  | MessageResponse
-  | ValidationErrorResponse;
-
 export const respond = {
   withData: <T>(message: string, data: T): [number, SuccessResponse<T>] => [
     HttpStatus.OK,

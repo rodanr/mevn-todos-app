@@ -89,13 +89,13 @@ export const listTodos = async (
   next: NextFunction,
 ): Promise<Response | undefined> => {
   try {
-    const todos = await todoService.listTodos(
+    const result = await todoService.listTodos(
       req.user!._id.toString(),
       req.validatedQuery!,
     );
     const [status, response] = respond.withData(
       'Todos retrieved successfully',
-      todos,
+      result,
     );
     return res.status(status).json(response);
   } catch (error) {

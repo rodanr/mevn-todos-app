@@ -15,10 +15,19 @@
   },
   "dependencies": {
     "@primeuix/themes": "^1.1.1",
-    "pinia": "^3.0.1",
+    "@primevue/themes": "^4.3.4",
+    "@tanstack/vue-query": "^5.79.0",
+    "@vee-validate/zod": "^4.15.0",
+    "@vueuse/core": "^13.3.0",
+    "axios": "^1.9.0",
+    "date-fns": "^4.1.0",
+    "pinia": "^3.0.2",
+    "primeicons": "^7.0.0",
     "primevue": "^4.3.4",
+    "vee-validate": "^4.15.0",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "zod": "^3.25.42"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.1",

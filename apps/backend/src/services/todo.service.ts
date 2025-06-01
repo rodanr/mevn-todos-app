@@ -3,29 +3,33 @@ import {
   CreateTodoInput,
   TodoFilterInput,
   UpdateTodoInput,
+  PaginatedTodosResponse,
+  TodoResponseDto,
+  toTodoResponseDto,
+  toTodoResponseDtoList,
 } from '../dto/todo.dto';
 import { AppError } from '../lib/errors';
 import logger from '../lib/logger';
-import { Todo, TodoDocument } from '../models';
+import { Todo } from '../models';
 
 export const createTodo = async (
   userId: string,
   data: CreateTodoInput,
-): Promise<TodoDocument> => {
+): Promise<TodoResponseDto> => {
   logger.info('Creating todo for user:', userId);
   const todo = new Todo({
     ...data,
     userId: new Types.ObjectId(userId),
   });
   await todo.save();
-  return todo;
+  return toTodoResponseDto(todo);
 };
 
 export const updateTodo = async (
   userId: string,
   todoId: string,
   data: UpdateTodoInput,
-): Promise<TodoDocument> => {
+): Promise<TodoResponseDto> => {
   logger.info('Updating todo:', todoId, 'for user:', userId);
   const todo = await Todo.findOne({
     _id: todoId,
@@ -49,7 +53,7 @@ export const updateTodo = async (
 
   Object.assign(todo, data);
   await todo.save();
-  return todo;
+  return toTodoResponseDto(todo);
 };
 
 export const deleteTodo = async (
@@ -70,7 +74,7 @@ export const deleteTodo = async (
 export const getTodoById = async (
   userId: string,
   todoId: string,
-): Promise<TodoDocument> => {
+): Promise<TodoResponseDto> => {
   const todo = await Todo.findOne({
     _id: todoId,
     userId: new Types.ObjectId(userId),
@@ -80,13 +84,13 @@ export const getTodoById = async (
     throw new AppError(404, 'Todo not found');
   }
 
-  return todo;
+  return toTodoResponseDto(todo);
 };
 
 export const listTodos = async (
   userId: string,
   filters: TodoFilterInput,
-): Promise<TodoDocument[]> => {
+): Promise<PaginatedTodosResponse> => {
   logger.info('Listing todos for user:', userId, 'with filters:', filters);
 
   const query: {
@@ -105,5 +109,29 @@ export const listTodos = async (
     query.isDone = filters.isDone;
   }
 
-  return Todo.find(query).sort({ dueDate: 1 });
+  const page = filters.page || 1;
+  const limit = filters.limit || 10;
+  const skip = (page - 1) * limit;
+
+  // Get total count for pagination metadata
+  const totalItems = await Todo.countDocuments(query);
+  const totalPages = Math.ceil(totalItems / limit);
+
+  // Get paginated todos
+  const todoDocuments = await Todo.find(query)
+    .sort({ dueDate: 1 })
+    .skip(skip)
+    .limit(limit);
+
+  return {
+    todos: toTodoResponseDtoList(todoDocuments),
+    pagination: {
+      currentPage: page,
+      totalPages,
+      totalItems,
+      itemsPerPage: limit,
+      hasNextPage: page < totalPages,
+      hasPreviousPage: page > 1,
+    },
+  };
 };

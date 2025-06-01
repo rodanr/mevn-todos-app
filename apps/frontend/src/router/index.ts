@@ -1,5 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import {
+  createRouter,
+  createWebHistory,
+  type NavigationGuardNext,
+  type RouteLocationNormalized,
+} from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import HomeView from '@/views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,16 +14,46 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: { requiresAuth: true },
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/auth',
+      redirect: '/auth/login',
+    },
+    {
+      path: '/auth/login',
+      name: 'login',
+      component: () => import('@/views/auth/LoginView.vue'),
+      meta: { requiresGuest: true },
+    },
+    {
+      path: '/auth/register',
+      name: 'register',
+      component: () => import('@/views/auth/RegisterView.vue'),
+      meta: { requiresGuest: true },
+    },
+    {
+      path: '/todos',
+      name: 'todos',
+      component: () => import('@/views/todos/TodosView.vue'),
+      meta: { requiresAuth: true },
     },
   ],
 })
+
+// Navigation guards
+router.beforeEach(
+  (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
+    const authStore = useAuthStore()
+
+    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+      next({ name: 'login' })
+    } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
+      next({ name: 'todos' })
+    } else {
+      next()
+    }
+  },
+)
 
 export default router
