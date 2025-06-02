@@ -10,6 +10,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/auth/login',
+    },
+    {
       path: '/auth',
       redirect: '/auth/login',
     },
@@ -30,6 +34,11 @@ const router = createRouter({
       name: 'todos',
       component: () => import('@/views/todos/TodosView.vue'),
       meta: { requiresAuth: true },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('@/views/NotFoundView.vue'),
     },
   ],
 })
